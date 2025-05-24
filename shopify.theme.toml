@@ -1,0 +1,2 @@
+[environments.development]
+store = "https://remake-build.myshopify.com/"
