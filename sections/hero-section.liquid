@@ -40,7 +40,6 @@
     display: flex;
     flex-direction: column;
     gap: {{ section.settings.content_spacing }}px;
-    max-width: {{ section.settings.content_width }}px;
     {% if section.settings.content_alignment == 'left' %}
       align-items: flex-start;
       text-align: left;
@@ -142,7 +141,6 @@
     }
 
     .skincare-hero__content {
-      max-width: calc({{ section.settings.content_width }}px * 0.9);
       gap: calc({{ section.settings.content_spacing }}px * 0.8);
     }
   }
@@ -167,7 +165,6 @@
     }
 
     .skincare-hero__content {
-      max-width: 100%;
       align-items: center;
       text-align: center;
       gap: calc({{ section.settings.content_spacing }}px * 0.7);
@@ -327,17 +324,6 @@
       ],
       "default": "right",
       "info": "Choose whether content appears on the left or right side"
-    },
-    {
-      "type": "range",
-      "id": "content_width",
-      "min": 300,
-      "max": 800,
-      "step": 50,
-      "unit": "px",
-      "label": "Content width",
-      "default": 400,
-      "info": "Controls how far the content extends into the middle"
     },
     {
       "type": "range",
