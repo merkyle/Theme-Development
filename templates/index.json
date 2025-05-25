@@ -13,7 +13,6 @@
       "type": "hero-section",
       "name": "Skincare Hero",
       "settings": {
-        "hero_image": "shopify://shop_images/ChatGPT_Image_May_25_2025_12_11_30_PM_2.png",
         "section_height": 75,
         "content_width": 500,
         "content_padding_left": 50,
