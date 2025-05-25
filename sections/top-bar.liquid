@@ -1,6 +1,695 @@
-{% schema %}
-  {
-    "name": "Section name",
-    "settings": []
+{% comment %}
+Rainbow Top Bar Section for Shopify
+Animated scrolling text with rainbow borders
+{% endcomment %}
+
+<div class="rainbow-top-bar" id="rainbow-top-bar-{{ section.id }}">
+  <!-- Top Rainbow Border -->
+  <div class="rainbow-border rainbow-border-top"></div>
+  
+  <!-- Scrolling Text Container -->
+  <div class="scrolling-text-container">
+    <div class="scrolling-text" id="scrolling-text-{{ section.id }}">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'text_item' %}
+            <span class="text-item">
+              {% if block.settings.text_content != blank %}
+                {{ block.settings.text_content }}
+              {% endif %}
+              {% if block.settings.show_separator %}
+                <span class="text-separator">{{ block.settings.separator_symbol | default: '•' }}</span>
+              {% endif %}
+            </span>
+        {% endcase %}
+      {% endfor %}
+      
+      <!-- Duplicate content for seamless loop -->
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'text_item' %}
+            <span class="text-item">
+              {% if block.settings.text_content != blank %}
+                {{ block.settings.text_content }}
+              {% endif %}
+              {% if block.settings.show_separator %}
+                <span class="text-separator">{{ block.settings.separator_symbol | default: '•' }}</span>
+              {% endif %}
+            </span>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+  
+  <!-- Bottom Rainbow Border -->
+  <div class="rainbow-border rainbow-border-bottom"></div>
+</div>
+
+<style>
+  #rainbow-top-bar-{{ section.id }} {
+    position: {{ section.settings.position_type }};
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: {{ section.settings.z_index | default: 1000 }};
+    background: {{ section.settings.background_color | default: '#000000' }};
+    overflow: hidden;
+    {% if section.settings.position_type == 'fixed' %}
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    {% endif %}
   }
+
+  /* Rainbow Border Animation */
+  #rainbow-top-bar-{{ section.id }} .rainbow-border {
+    height: {{ section.settings.border_height | default: 3 }}px;
+    background: linear-gradient(
+      90deg,
+      #ff0000,
+      #ff8000,
+      #ffff00,
+      #80ff00,
+      #00ff00,
+      #00ff80,
+      #00ffff,
+      #0080ff,
+      #0000ff,
+      #8000ff,
+      #ff00ff,
+      #ff0080,
+      #ff0000
+    );
+    background-size: 400% 100%;
+    animation: rainbow-slide {{ section.settings.rainbow_speed | default: 3 }}s linear infinite;
+  }
+
+  @keyframes rainbow-slide {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 400% 50%;
+    }
+  }
+
+  /* Scrolling Text Container */
+  #rainbow-top-bar-{{ section.id }} .scrolling-text-container {
+    padding: {{ section.settings.vertical_padding | default: 12 }}px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+  }
+
+  #rainbow-top-bar-{{ section.id }} .scrolling-text {
+    display: inline-block;
+    animation: scroll-text {{ section.settings.scroll_speed | default: 30 }}s linear infinite;
+    font-family: {{ section.settings.font_family | default: 'Arial, sans-serif' }};
+    font-size: {{ section.settings.font_size | default: 14 }}px;
+    font-weight: {{ section.settings.font_weight | default: 500 }};
+    color: {{ section.settings.text_color | default: '#ffffff' }};
+    text-transform: {{ section.settings.text_transform | default: 'none' }};
+    letter-spacing: {{ section.settings.letter_spacing | default: 5 | times: 0.1 }}px;
+  }
+
+  @keyframes scroll-text {
+    0% {
+      transform: translateX(100vw);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  #rainbow-top-bar-{{ section.id }} .text-item {
+    margin-right: {{ section.settings.item_spacing | default: 40 }}px;
+  }
+
+  #rainbow-top-bar-{{ section.id }} .text-separator {
+    margin: 0 {{ section.settings.separator_spacing | default: 20 }}px;
+    opacity: 0.7;
+    font-weight: normal;
+  }
+
+  /* Hover Effects */
+  {% if section.settings.enable_hover_pause %}
+  #rainbow-top-bar-{{ section.id }} .scrolling-text-container:hover .scrolling-text {
+    animation-play-state: paused;
+  }
+  {% endif %}
+
+  {% if section.settings.enable_hover_glow %}
+  #rainbow-top-bar-{{ section.id }}:hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+  {% endif %}
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    #rainbow-top-bar-{{ section.id }} .scrolling-text {
+      font-size: {{ section.settings.mobile_font_size | default: 12 }}px;
+      animation-duration: {{ section.settings.mobile_scroll_speed | default: 20 }}s;
+    }
+    
+    #rainbow-top-bar-{{ section.id }} .scrolling-text-container {
+      padding: {{ section.settings.mobile_vertical_padding | default: 8 }}px 0;
+    }
+    
+    #rainbow-top-bar-{{ section.id }} .text-item {
+      margin-right: {{ section.settings.mobile_item_spacing | default: 30 }}px;
+    }
+  }
+
+  /* Alternative Rainbow Effects */
+  {% if section.settings.rainbow_style == 'pulse' %}
+  #rainbow-top-bar-{{ section.id }} .rainbow-border {
+    animation: rainbow-pulse {{ section.settings.rainbow_speed | default: 3 }}s ease-in-out infinite;
+  }
+
+  @keyframes rainbow-pulse {
+    0%, 100% {
+      background: linear-gradient(90deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00);
+    }
+    25% {
+      background: linear-gradient(90deg, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff);
+    }
+    50% {
+      background: linear-gradient(90deg, #0000ff, #8000ff, #ff00ff, #ff0080, #ff0000);
+    }
+    75% {
+      background: linear-gradient(90deg, #ff0000, #ff4000, #ff8000, #ffff00, #80ff00);
+    }
+  }
+  {% endif %}
+
+  {% if section.settings.rainbow_style == 'wave' %}
+  #rainbow-top-bar-{{ section.id }} .rainbow-border {
+    background: linear-gradient(
+      45deg,
+      #ff0000 0%,
+      #ff8000 14%,
+      #ffff00 28%,
+      #80ff00 42%,
+      #00ff00 57%,
+      #00ffff 71%,
+      #0000ff 85%,
+      #8000ff 100%
+    );
+    background-size: 200% 200%;
+    animation: rainbow-wave {{ section.settings.rainbow_speed | default: 3 }}s ease-in-out infinite;
+  }
+
+  @keyframes rainbow-wave {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  {% endif %}
+
+  /* Text Effects */
+  {% if section.settings.text_effect == 'glow' %}
+  #rainbow-top-bar-{{ section.id }} .scrolling-text {
+    text-shadow: 0 0 10px {{ section.settings.text_color | default: '#ffffff' }};
+  }
+  {% endif %}
+
+  {% if section.settings.text_effect == 'rainbow' %}
+  #rainbow-top-bar-{{ section.id }} .scrolling-text {
+    background: linear-gradient(
+      90deg,
+      #ff0000,
+      #ff8000,
+      #ffff00,
+      #80ff00,
+      #00ff00,
+      #00ff80,
+      #00ffff,
+      #0080ff,
+      #0000ff,
+      #8000ff,
+      #ff00ff,
+      #ff0080,
+      #ff0000
+    );
+    background-size: 400% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: rainbow-text {{ section.settings.rainbow_speed | default: 3 }}s linear infinite;
+  }
+
+  @keyframes rainbow-text {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 400% 50%;
+    }
+  }
+  {% endif %}
+
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    #rainbow-top-bar-{{ section.id }} .scrolling-text {
+      animation-duration: 60s;
+    }
+    
+    #rainbow-top-bar-{{ section.id }} .rainbow-border {
+      animation-duration: 10s;
+    }
+  }
+
+  /* Print Styles */
+  @media print {
+    #rainbow-top-bar-{{ section.id }} {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const topBar = document.getElementById('rainbow-top-bar-{{ section.id }}');
+    const scrollingText = document.getElementById('scrolling-text-{{ section.id }}');
+    
+    if (!topBar || !scrollingText) return;
+
+    // Adjust body padding if top bar is fixed
+    {% if section.settings.position_type == 'fixed' %}
+    function adjustBodyPadding() {
+      const topBarHeight = topBar.offsetHeight;
+      document.body.style.paddingTop = topBarHeight + 'px';
+    }
+    
+    // Initial adjustment
+    adjustBodyPadding();
+    
+    // Adjust on window resize
+    window.addEventListener('resize', adjustBodyPadding);
+    {% endif %}
+
+    // Dynamic scroll speed based on content length
+    {% if section.settings.auto_adjust_speed %}
+    function adjustScrollSpeed() {
+      const textWidth = scrollingText.scrollWidth;
+      const containerWidth = topBar.offsetWidth;
+      const baseSpeed = {{ section.settings.scroll_speed | default: 30 }};
+      const adjustedSpeed = (textWidth / containerWidth) * baseSpeed * 0.5;
+      
+      scrollingText.style.animationDuration = Math.max(adjustedSpeed, 10) + 's';
+    }
+    
+    adjustScrollSpeed();
+    window.addEventListener('resize', adjustScrollSpeed);
+    {% endif %}
+
+    // Click tracking for analytics
+    {% if section.settings.enable_click_tracking %}
+    topBar.addEventListener('click', function() {
+      // Google Analytics
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'top_bar_click', {
+          'section_id': '{{ section.id }}',
+          'section_name': 'rainbow_top_bar'
+        });
+      }
+      
+      // Shopify Analytics
+      if (typeof ShopifyAnalytics !== 'undefined') {
+        ShopifyAnalytics.track('Top Bar Clicked', {
+          section: 'rainbow-top-bar',
+          position: 'header'
+        });
+      }
+    });
+    {% endif %}
+
+    // Keyboard accessibility
+    topBar.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        this.blur();
+      }
+    });
+
+    // Performance optimization: pause animations when tab is not visible
+    let isVisible = true;
+    
+    document.addEventListener('visibilitychange', function() {
+      isVisible = !document.hidden;
+      
+      if (isVisible) {
+        scrollingText.style.animationPlayState = 'running';
+        topBar.querySelectorAll('.rainbow-border').forEach(border => {
+          border.style.animationPlayState = 'running';
+        });
+      } else {
+        scrollingText.style.animationPlayState = 'paused';
+        topBar.querySelectorAll('.rainbow-border').forEach(border => {
+          border.style.animationPlayState = 'paused';
+        });
+      }
+    });
+
+    // Smooth scroll adjustment for anchor links when top bar is fixed
+    {% if section.settings.position_type == 'fixed' %}
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          const topBarHeight = topBar.offsetHeight;
+          const targetPosition = target.offsetTop - topBarHeight - 20;
+          
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    {% endif %}
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Rainbow Top Bar",
+  "tag": "section",
+  "class": "rainbow-top-bar-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Position & Layout"
+    },
+    {
+      "type": "select",
+      "id": "position_type",
+      "label": "Position Type",
+      "options": [
+        { "value": "relative", "label": "Relative (In document flow)" },
+        { "value": "fixed", "label": "Fixed (Sticky at top)" }
+      ],
+      "default": "fixed"
+    },
+    {
+      "type": "range",
+      "id": "z_index",
+      "label": "Z-Index (Layer Priority)",
+      "min": 100,
+      "max": 9900,
+      "step": 100,
+      "default": 1000
+    },
+    {
+      "type": "header",
+      "content": "Rainbow Border Settings"
+    },
+    {
+      "type": "range",
+      "id": "border_height",
+      "label": "Border Height",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "rainbow_style",
+      "label": "Rainbow Animation Style",
+      "options": [
+        { "value": "slide", "label": "Sliding" },
+        { "value": "pulse", "label": "Pulsing" },
+        { "value": "wave", "label": "Wave" }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "range",
+      "id": "rainbow_speed",
+      "label": "Rainbow Animation Speed",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3,
+      "unit": "s"
+    },
+    {
+      "type": "header",
+      "content": "Text Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font Size (Desktop)",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_font_size",
+      "label": "Font Size (Mobile)",
+      "min": 8,
+      "max": 18,
+      "step": 1,
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font Weight",
+      "options": [
+        { "value": "300", "label": "Light" },
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi Bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "Text Transform",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "lowercase", "label": "Lowercase" },
+        { "value": "capitalize", "label": "Capitalize" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "text_effect",
+      "label": "Text Effect",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "glow", "label": "Glow" },
+        { "value": "rainbow", "label": "Rainbow Text" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing",
+      "label": "Letter Spacing (0.1px increments)",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 5,
+      "info": "Value will be multiplied by 0.1px"
+    },
+    {
+      "type": "header",
+      "content": "Animation Settings"
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "label": "Scroll Speed (Desktop)",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "default": 30,
+      "unit": "s"
+    },
+    {
+      "type": "range",
+      "id": "mobile_scroll_speed",
+      "label": "Scroll Speed (Mobile)",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "default": 20,
+      "unit": "s"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_adjust_speed",
+      "label": "Auto-adjust speed based on content length",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_hover_pause",
+      "label": "Pause animation on hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_hover_glow",
+      "label": "Add glow effect on hover",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "vertical_padding",
+      "label": "Vertical Padding (Desktop)",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_vertical_padding",
+      "label": "Vertical Padding (Mobile)",
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "default": 8,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "label": "Space Between Items (Desktop)",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_item_spacing",
+      "label": "Space Between Items (Mobile)",
+      "min": 15,
+      "max": 50,
+      "step": 5,
+      "default": 30,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "separator_spacing",
+      "label": "Space Around Separators",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Analytics & Tracking"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_click_tracking",
+      "label": "Enable click tracking",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text_item",
+      "name": "Text Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text_content",
+          "label": "Text Content",
+          "default": "Free shipping on orders over $50"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_separator",
+          "label": "Show separator after this item",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "separator_symbol",
+          "label": "Separator Symbol",
+          "default": "•",
+          "info": "Symbol to display between items"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rainbow Top Bar",
+      "blocks": [
+        {
+          "type": "text_item",
+          "settings": {
+            "text_content": "🎉 Free shipping on orders over $50",
+            "show_separator": true
+          }
+        },
+        {
+          "type": "text_item",
+          "settings": {
+            "text_content": "✨ New arrivals now available",
+            "show_separator": true
+          }
+        },
+        {
+          "type": "text_item",
+          "settings": {
+            "text_content": "🔥 Limited time: 20% off everything",
+            "show_separator": true
+          }
+        },
+        {
+          "type": "text_item",
+          "settings": {
+            "text_content": "📞 Need help? Call us: 1-800-FASHION",
+            "show_separator": false
+          }
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}
