@@ -1,0 +1,291 @@
+<style>
+  .skincare-hero {
+    min-height: 100vh;
+    background-color: #E8DDD4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .skincare-hero__container {
+    max-width: 1400px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .skincare-hero__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .skincare-hero__tagline {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.875rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .skincare-hero__title {
+    color: white;
+    font-size: 3.5rem;
+    font-weight: 300;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  .skincare-hero__description {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.125rem;
+    line-height: 1.6;
+    max-width: 28rem;
+    margin: 0;
+  }
+
+  .skincare-hero__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 1.5rem 2rem;
+    font-size: 1rem;
+    font-weight: 300;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: fit-content;
+  }
+
+  .skincare-hero__button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-decoration: none;
+  }
+
+  .skincare-hero__button-icon {
+    width: 1rem;
+    height: 1rem;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+  }
+
+  .skincare-hero__image {
+    position: relative;
+    height: 600px;
+    background-image: url('{{ section.settings.hero_image | image_url }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 0.5rem;
+  }
+
+  .skincare-hero__image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 8rem;
+    background: linear-gradient(to top, rgba(212, 196, 176, 0.3), transparent);
+    border-radius: 0 0 0.5rem 0.5rem;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .skincare-hero__container {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    
+    .skincare-hero__title {
+      font-size: 3rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .skincare-hero {
+      padding: 1rem;
+      min-height: auto;
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+    
+    .skincare-hero__container {
+      gap: 2rem;
+    }
+    
+    .skincare-hero__title {
+      font-size: 2.5rem;
+    }
+    
+    .skincare-hero__image {
+      height: 400px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .skincare-hero__title {
+      font-size: 2rem;
+    }
+    
+    .skincare-hero__description {
+      font-size: 1rem;
+    }
+    
+    .skincare-hero__button {
+      padding: 1rem 1.5rem;
+    }
+  }
+</style>
+
+<section class="skincare-hero">
+  <div class="skincare-hero__container">
+    <!-- Left Content -->
+    <div class="skincare-hero__content">
+      {% if section.settings.tagline != blank %}
+        <p class="skincare-hero__tagline">{{ section.settings.tagline }}</p>
+      {% endif %}
+
+      {% if section.settings.title != blank %}
+        <h1 class="skincare-hero__title">{{ section.settings.title }}</h1>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <p class="skincare-hero__description">{{ section.settings.description }}</p>
+      {% endif %}
+
+      {% if section.settings.button_text != blank and section.settings.button_url != blank %}
+        <a href="{{ section.settings.button_url }}" class="skincare-hero__button">
+          {{ section.settings.button_text }}
+          <svg class="skincare-hero__button-icon" viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      {% endif %}
+    </div>
+
+    <!-- Right Content - Image -->
+    <div class="skincare-hero__image">
+      {% if section.settings.hero_image == blank %}
+        <div style="background: #f5f5f5; height: 100%; display: flex; align-items: center; justify-content: center; color: #666;">
+          <p>Upload an image in the theme editor</p>
+        </div>
+      {% endif %}
+      <div class="skincare-hero__image-overlay"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add any interactive functionality here
+    const button = document.querySelector('.skincare-hero__button');
+    
+    if (button) {
+      button.addEventListener('click', function(e) {
+        // Add click tracking or other functionality
+        console.log('Hero button clicked');
+      });
+    }
+
+    // Optional: Add scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    });
+
+    const heroContent = document.querySelector('.skincare-hero__content');
+    if (heroContent) {
+      heroContent.style.opacity = '0';
+      heroContent.style.transform = 'translateY(20px)';
+      heroContent.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(heroContent);
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Skincare Hero",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Treat Your Body Like Your Face"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Highly Effective Body Care"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "A combination of nature and advanced technology. Vegan, natural, skin-friendly and rich in effective biotechnological ingredients."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Discover More"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image",
+      "info": "Upload the skincare products image"
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Section padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Section padding bottom",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Skincare Hero"
+    }
+  ]
+}
+{% endschema %}
