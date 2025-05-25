@@ -8,7 +8,11 @@
     background-repeat: no-repeat;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    {% if section.settings.content_alignment == 'right' %}
+      justify-content: flex-end;
+    {% else %}
+      justify-content: flex-start;
+    {% endif %}
     padding: 3rem 2rem;
     position: relative;
     width: 100%;
@@ -21,8 +25,13 @@
     width: 100%;
     position: relative;
     z-index: 1;
-    padding-left: {{ section.settings.content_padding_left }}px;
-    padding-right: {{ section.settings.content_padding_right }}px;
+    {% if section.settings.content_alignment == 'right' %}
+      padding-left: {{ section.settings.content_padding_right }}px;
+      padding-right: {{ section.settings.content_padding_left }}px;
+    {% else %}
+      padding-left: {{ section.settings.content_padding_left }}px;
+      padding-right: {{ section.settings.content_padding_right }}px;
+    {% endif %}
     padding-top: {{ section.settings.content_padding_top }}px;
     padding-bottom: {{ section.settings.content_padding_bottom }}px;
   }
@@ -30,12 +39,19 @@
   .skincare-hero__content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: {{ section.settings.content_spacing }}px;
     max-width: {{ section.settings.content_width }}px;
+    {% if section.settings.content_alignment == 'right' %}
+      align-items: flex-end;
+      text-align: right;
+    {% else %}
+      align-items: flex-start;
+      text-align: left;
+    {% endif %}
   }
 
   .skincare-hero__tagline {
-    color: rgba(255, 255, 255, 0.9);
+    color: {{ section.settings.tagline_color }};
     font-size: 0.875rem;
     font-weight: 300;
     letter-spacing: 0.1em;
@@ -44,7 +60,7 @@
   }
 
   .skincare-hero__title {
-    color: white;
+    color: {{ section.settings.title_color }};
     font-size: {{ section.settings.title_font_size }}px;
     font-weight: 300;
     line-height: 1.1;
@@ -53,7 +69,7 @@
   }
 
   .skincare-hero__description {
-    color: rgba(255, 255, 255, 0.8);
+    color: {{ section.settings.description_color }};
     font-size: {{ section.settings.description_font_size }}px;
     line-height: 1.6;
     margin: 0;
@@ -64,8 +80,8 @@
     align-items: center;
     gap: 0.5rem;
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: white;
+    border: 1px solid {{ section.settings.button_border_color }};
+    color: {{ section.settings.button_text_color }};
     padding: 1.25rem 2rem;
     font-size: 1rem;
     font-weight: 300;
@@ -77,10 +93,10 @@
   }
 
   .skincare-hero__button:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: white;
+    background: {{ section.settings.button_hover_bg }};
+    color: {{ section.settings.button_text_color }};
     text-decoration: none;
-    border-color: rgba(255, 255, 255, 0.6);
+    border-color: {{ section.settings.button_hover_border }};
   }
 
   .skincare-hero__button-icon {
@@ -108,8 +124,13 @@
     }
 
     .skincare-hero__container {
-      padding-left: calc({{ section.settings.content_padding_left }}px * 0.8);
-      padding-right: calc({{ section.settings.content_padding_right }}px * 0.8);
+      {% if section.settings.content_alignment == 'right' %}
+        padding-left: calc({{ section.settings.content_padding_right }}px * 0.8);
+        padding-right: calc({{ section.settings.content_padding_left }}px * 0.8);
+      {% else %}
+        padding-left: calc({{ section.settings.content_padding_left }}px * 0.8);
+        padding-right: calc({{ section.settings.content_padding_right }}px * 0.8);
+      {% endif %}
     }
 
     .skincare-hero__title {
@@ -122,6 +143,7 @@
 
     .skincare-hero__content {
       max-width: calc({{ section.settings.content_width }}px * 0.9);
+      gap: calc({{ section.settings.content_spacing }}px * 0.8);
     }
   }
 
@@ -135,12 +157,20 @@
     }
 
     .skincare-hero__container {
-      padding-left: calc({{ section.settings.content_padding_left }}px * 0.5);
-      padding-right: calc({{ section.settings.content_padding_right }}px * 0.5);
+      {% if section.settings.content_alignment == 'right' %}
+        padding-left: calc({{ section.settings.content_padding_right }}px * 0.5);
+        padding-right: calc({{ section.settings.content_padding_left }}px * 0.5);
+      {% else %}
+        padding-left: calc({{ section.settings.content_padding_left }}px * 0.5);
+        padding-right: calc({{ section.settings.content_padding_right }}px * 0.5);
+      {% endif %}
     }
 
     .skincare-hero__content {
       max-width: 100%;
+      align-items: center;
+      text-align: center;
+      gap: calc({{ section.settings.content_spacing }}px * 0.7);
     }
 
     .skincare-hero__title {
@@ -160,8 +190,17 @@
     }
 
     .skincare-hero__container {
-      padding-left: calc({{ section.settings.content_padding_left }}px * 0.3);
-      padding-right: calc({{ section.settings.content_padding_right }}px * 0.3);
+      {% if section.settings.content_alignment == 'right' %}
+        padding-left: calc({{ section.settings.content_padding_right }}px * 0.3);
+        padding-right: calc({{ section.settings.content_padding_left }}px * 0.3);
+      {% else %}
+        padding-left: calc({{ section.settings.content_padding_left }}px * 0.3);
+        padding-right: calc({{ section.settings.content_padding_right }}px * 0.3);
+      {% endif %}
+    }
+
+    .skincare-hero__content {
+      gap: calc({{ section.settings.content_spacing }}px * 0.6);
     }
 
     .skincare-hero__title {
@@ -273,6 +312,23 @@
       "content": "Content Positioning"
     },
     {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left",
+      "info": "Choose whether content appears on the left or right side"
+    },
+    {
       "type": "range",
       "id": "content_width",
       "min": 300,
@@ -282,6 +338,17 @@
       "label": "Content width",
       "default": 600,
       "info": "Controls how far the content extends into the middle"
+    },
+    {
+      "type": "range",
+      "id": "content_spacing",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Content spacing",
+      "default": 30,
+      "info": "Space between content elements (tagline, title, description, button)"
     },
     {
       "type": "range",
@@ -350,6 +417,52 @@
       "unit": "px",
       "label": "Description font size",
       "default": 18
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "tagline_color",
+      "label": "Tagline color",
+      "default": "rgba(255, 255, 255, 0.9)"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "rgba(255, 255, 255, 0.8)"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Button border color",
+      "default": "rgba(255, 255, 255, 0.4)"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg",
+      "label": "Button hover background",
+      "default": "rgba(255, 255, 255, 0.15)"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_border",
+      "label": "Button hover border",
+      "default": "rgba(255, 255, 255, 0.6)"
     },
     {
       "type": "header",
