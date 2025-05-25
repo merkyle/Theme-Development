@@ -3,7 +3,7 @@
     min-height: {{ section.settings.section_height }}vh;
     background-color: #E8DDD4;
     background-image: url('{{ section.settings.hero_image | image_url }}');
-    background-size: 100% auto;
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
     display: flex;
@@ -94,7 +94,7 @@
     .skincare-hero {
       min-height: calc({{ section.settings.section_height }}vh * 0.85);
       padding: 2rem 1.5rem;
-      background-size: 100% auto;
+      background-size: contain;
     }
 
     .skincare-hero__container {
@@ -121,7 +121,7 @@
       padding: 2rem 1rem;
       justify-content: center;
       text-align: center;
-      background-size: 100% auto;
+      background-size: contain;
     }
 
     .skincare-hero__container {
@@ -146,7 +146,7 @@
     .skincare-hero {
       min-height: calc({{ section.settings.section_height }}vh * 0.6);
       padding: 1.5rem 1rem;
-      background-size: 100% auto;
+      background-size: contain;
     }
 
     .skincare-hero__container {
