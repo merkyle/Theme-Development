@@ -14,7 +14,12 @@
       "name": "Skincare Hero",
       "settings": {
         "hero_image": "shopify://shop_images/hero.png",
+        "section_height": 80,
         "content_width": 500,
+        "content_padding_left": 50,
+        "content_padding_right": 20,
+        "content_padding_top": 0,
+        "content_padding_bottom": 0,
         "title_font_size": 38,
         "description_font_size": 14,
         "tagline": "Treat Your Body Like Your Face",
