@@ -24,7 +24,7 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    max-width: 600px;
+    max-width: {{ section.settings.content_width }}px;
   }
 
   .skincare-hero__tagline {
@@ -38,7 +38,7 @@
 
   .skincare-hero__title {
     color: white;
-    font-size: 3.5rem;
+    font-size: {{ section.settings.title_font_size }}px;
     font-weight: 300;
     line-height: 1.1;
     margin: 0;
@@ -47,7 +47,7 @@
 
   .skincare-hero__description {
     color: rgba(255, 255, 255, 0.8);
-    font-size: 1.125rem;
+    font-size: {{ section.settings.description_font_size }}px;
     line-height: 1.6;
     margin: 0;
   }
@@ -92,7 +92,15 @@
     }
 
     .skincare-hero__title {
-      font-size: 3rem;
+      font-size: calc({{ section.settings.title_font_size }}px * 0.85);
+    }
+
+    .skincare-hero__description {
+      font-size: calc({{ section.settings.description_font_size }}px * 0.9);
+    }
+
+    .skincare-hero__content {
+      max-width: calc({{ section.settings.content_width }}px * 0.9);
     }
   }
 
@@ -109,7 +117,11 @@
     }
 
     .skincare-hero__title {
-      font-size: 2.5rem;
+      font-size: calc({{ section.settings.title_font_size }}px * 0.7);
+    }
+
+    .skincare-hero__description {
+      font-size: calc({{ section.settings.description_font_size }}px * 0.85);
     }
   }
 
@@ -120,11 +132,11 @@
     }
 
     .skincare-hero__title {
-      font-size: 2rem;
+      font-size: calc({{ section.settings.title_font_size }}px * 0.6);
     }
 
     .skincare-hero__description {
-      font-size: 1rem;
+      font-size: calc({{ section.settings.description_font_size }}px * 0.8);
     }
 
     .skincare-hero__button {
@@ -207,6 +219,45 @@
       "id": "hero_image",
       "label": "Background Image",
       "info": "Upload the skincare products image to use as background"
+    },
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "min": 300,
+      "max": 800,
+      "step": 50,
+      "unit": "px",
+      "label": "Content width",
+      "default": 600,
+      "info": "Controls how far the content extends into the middle"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Title font size",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "description_font_size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Description font size",
+      "default": 18
+    },
+    {
+      "type": "header",
+      "content": "Text Content"
     },
     {
       "type": "text",
