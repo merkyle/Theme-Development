@@ -14,7 +14,7 @@
       "name": "Skincare Hero",
       "settings": {
         "hero_image": "shopify://shop_images/hero.png",
-        "section_height": 80,
+        "section_height": 90,
         "content_width": 500,
         "content_padding_left": 50,
         "content_padding_right": 20,
